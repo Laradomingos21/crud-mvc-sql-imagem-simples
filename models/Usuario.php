@@ -1,35 +1,59 @@
-<?php
-require_once "app/config/conexao.php";
+<?php   
+    require_once "app/config/conexao.php";
 
-function listarUsuarios() {
-    $con = conectar();
-    $sql ="SELECT * FROM usuario";
-    $resultado = mysqli_query($con, $sql);
-    return mysqli_fetch_all($resultado, MYSQLI_ASSOC);
-}
+    function listarUsuarios(){
+        $con = conectar();
+        $sql = "SELECT * FROM usuario";
+        $resultado = mysqli_query($con, $sql);
+        return mysqli_fetch_all($resultado, MYSQLI_ASSOC);
+    }
 
-function inserirUsuario($nome, $email, $imagem) {
-    $con = conectar ();
-    $sql = "INSERT INTO usuario(nome, email, imagem)
-    VALUES ('$nome', '$email', '$imagem')";
-    mysqli_query($con, $sql);
-}
+    function inserirUsuario($nome, $email, $imagem, $login, $senha, $papel){
+        $con = conectar();
+        $sql = "INSERT INTO usuario (nome, email, imagem, login, senha, papel)
+                VALUES ('$nome', '$email', '$imagem', '$login', '$senha', '$papel' )";
+        
+        mysqli_query($con, $sql);
+    }
 
-function buscarUsuario($id) {
-    $con = conectar();
-    $sql = "SELECT * FROM usuario WHERE id = $id";
-    $resultado = mysqli_query($con, $sql);
-    return mysqli_fetch_assoc($resultado);
-}
+    function buscarUsuario($id){
+        $con = conectar();
+        $sql = "SELECT * FROM usuario WHERE id = $id";
+        $resultado = mysqli_query($con, $sql);
+        
+        return mysqli_fetch_assoc($resultado);
+    }
 
-function atualizarUsuario($id, $nome, $email, $imagem) {
-    $con = conectar();
-    $sql = "UPDATE usuario SET nome= '$nome', email='$email', imagem='$imagem' WHERE id=$id";
-    mysqli_query($con, $sql);
-}
+    function atualizarUsuario($id, $nome, $email, $imagem, $login, $senha){
+        $con = conectar();
+        $sql = "UPDATE usuario 
+                SET nome = '$nome', email = '$email', imagem = '$imagem ', login = '$login', senha = '$senha'
+                WHERE id = $id";
+        
+        mysqli_query($con, $sql);
+    }
 
-function excluirUsuario($id) {
-    $con = conectar();
-    $sql = "DELETE FROM usuario WHERE id=$id";
-    mysqli_query($con, $sql);
-}
+    function excluirUsuario($id){
+        $con = conectar();
+        $sql = "DELETE FROM usuario WHERE id = $id";
+        
+        mysqli_query($con, $sql);
+    }
+
+    function login_adm($login, $senha){
+        $con = conectar();
+        $sql = "SELECT id,nome,login,senha FROM usuario WHERE login = '$login' AND senha = '$senha' AND papel = 'adm'";
+        
+        $resultado = mysqli_query($con, $sql);
+        
+        return mysqli_fetch_assoc($resultado);
+    }
+
+    function imagemUsuario($login){
+        $con = conectar();
+        $sql = "SELECT imagem FROM usuario WHERE login = '$login'";
+        
+        $resultado = mysqli_query($con, $sql);
+        
+        return mysqli_fetch_assoc($resultado);
+    }
